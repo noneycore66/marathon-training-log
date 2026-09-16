@@ -33,6 +33,7 @@ h1{font-family:'Bebas Neue',sans-serif;font-size:40px;letter-spacing:1px;margin:
 .week-totals{font-family:'IBM Plex Mono',monospace;font-size:12px;color:#555;}
 table{width:100%;border-collapse:collapse;margin-top:8px;table-layout:fixed;}
 th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:#666;padding:6px 8px;border-bottom:1px solid var(--ink);}
+th.num{text-align:center;}
 td{padding:7px 8px;border-bottom:1px solid var(--hair);font-size:13px;vertical-align:top;}
 td.num{font-family:'IBM Plex Mono',monospace;text-align:center;white-space:nowrap;}
 td.note{font-size:11px;color:#777;}
@@ -50,7 +51,6 @@ tr.postponed-row{background:#fbf3e0;}
 .analysis{margin-top:36px;border-top:3px solid var(--ink);padding-top:16px;}
 .analysis h2{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:1px;}
 .analysis ul{font-family:'IBM Plex Mono',monospace;font-size:13px;line-height:1.9;padding-left:20px;}
-input.notefield{width:100%;border:none;background:transparent;font-size:11px;font-family:'Inter',sans-serif;color:#555;border-bottom:1px dashed #ccc;}
 """
 
 MOBILE_CSS = BASE_CSS + """
@@ -172,9 +172,12 @@ def render_desktop(days, all_days, weeks, analysis, today, plan_start, race_date
             pace = ", ".join(s["pace"] for s in sessions if s.get("pace")) or "-"
             hr = ", ".join(str(s["avg_hr"]) + " bpm" for s in sessions if s.get("avg_hr")) or "-"
             name = day_program_name(rec) if sessions else (rec.get("postponed_note") and f"Long Run ({rec['postponed_note']})" or "Rest" if rec["status"] == "Rest" else "-")
-            note = ""
+            note_parts = []
             if "weight_missed_makeup_day" in rec["note_flags"]:
-                note = '<span class="flag">+ เวทขาดวันนี้</span>'
+                note_parts.append('<span class="flag">ขาดซ้อมเวท วิ่งชดเชยแทนวันนี้</span>')
+            if rec["status"] == "Postponed" and rec.get("postponed_note"):
+                note_parts.append(f'<span class="flag">เลื่อนวิ่งยาวมาจาก{rec["postponed_note"]}</span>')
+            note = "".join(note_parts)
             rows.append(f"""<tr class="{row_cls}">
               <td>{THAI_DAY[rec['weekday']]}</td>
               <td class="num">{fmt_date(d)}</td>
@@ -184,11 +187,11 @@ def render_desktop(days, all_days, weeks, analysis, today, plan_start, race_date
               <td class="num">{time_}</td>
               <td class="num">{pace}</td>
               <td class="num">{hr}</td>
-              <td class="note">{note}<input class="notefield" placeholder="เพิ่มโน้ต..."></td>
+              <td class="note">{note}</td>
             </tr>""")
         body.append(f"""<table>
           <colgroup><col style="width:9%"><col style="width:8%"><col style="width:9%"><col style="width:22%"><col style="width:9%"><col style="width:8%"><col style="width:9%"><col style="width:9%"><col style="width:17%"></colgroup>
-          <thead><tr><th>วัน</th><th>วันที่</th><th>สถานะ</th><th>ชื่อ/โปรแกรม</th><th>ระยะ</th><th>เวลา</th><th>เพซ</th><th>HR เฉลี่ย</th><th>โน้ต</th></tr></thead>
+          <thead><tr><th>วัน</th><th class="num">วันที่</th><th>ประเภท</th><th>ชื่อ/โปรแกรม</th><th class="num">ระยะ</th><th class="num">เวลา</th><th class="num">เพซ</th><th class="num">HR เฉลี่ย</th><th>หมายเหตุ</th></tr></thead>
           <tbody>{''.join(rows)}</tbody></table>""")
 
     return f"""<!DOCTYPE html><html lang="th"><head><meta charset="UTF-8">
@@ -214,7 +217,12 @@ def render_mobile(days, all_days, weeks, analysis, today, plan_start, race_date,
                 hr_part = f' · {s["avg_hr"]} bpm' if s.get("avg_hr") else ""
                 return f'<div class="session-line">{s["name"]} — {dist_part}{s["moving_min"]} นาที{pace_part}{hr_part}</div>'
             sess_lines = "".join(_sess_line(s) for s in rec["sessions"])
-            flag = '<div class="flag">+ เวทขาดวันนี้</div>' if "weight_missed_makeup_day" in rec["note_flags"] else ""
+            flag_parts = []
+            if "weight_missed_makeup_day" in rec["note_flags"]:
+                flag_parts.append('<div class="flag">ขาดซ้อมเวท วิ่งชดเชยแทนวันนี้</div>')
+            if rec["status"] == "Postponed" and rec.get("postponed_note"):
+                flag_parts.append(f'<div class="flag">เลื่อนวิ่งยาวมาจาก{rec["postponed_note"]}</div>')
+            flag = "".join(flag_parts)
             cards.append(f"""<div class="day-card">
               <div class="day-top"><span>{THAI_DAY[rec['weekday']]} {fmt_date(d)}</span>{day_status_pill(rec)}</div>
               {sess_lines}{flag}
