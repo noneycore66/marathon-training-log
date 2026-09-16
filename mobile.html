@@ -1,0 +1,582 @@
+<!DOCTYPE html><html lang="th"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Marathon Log (Mobile)</title><style>
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;600&family=Inter:wght@400;500;600;700&display=swap');
+:root{
+  --paper:#f4f2ee; --ink:#1a1a1a; --hair:#ddd8cf;
+  --weight:#8a5a2b; --run:#2f7d4f; --longrun:#6c3fa6; --rest:#2f5fa6;
+  --missed:#c0392b; --postponed:#b8860b; --pending:#8a8a8a;
+}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:'Inter',sans-serif;margin:0;padding:24px;}
+h1{font-family:'Bebas Neue',sans-serif;font-size:40px;letter-spacing:1px;margin:0;}
+.updated{font-size:12px;color:#666;font-family:'IBM Plex Mono',monospace;}
+.header-row{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px solid var(--ink);padding-bottom:12px;margin-bottom:12px;}
+.desc{font-size:13px;color:#555;margin:8px 0 16px;line-height:1.6;}
+.progress-bar{background:#fff;border:1px solid var(--hair);border-radius:6px;padding:12px 16px;margin-bottom:20px;font-family:'IBM Plex Mono',monospace;font-size:13px;display:flex;gap:24px;flex-wrap:wrap;}
+.progress-bar b{color:var(--ink)}
+.week-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px;margin-top:28px;display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--ink);padding-bottom:4px;}
+.week-totals{font-family:'IBM Plex Mono',monospace;font-size:12px;color:#555;}
+table{width:100%;border-collapse:collapse;margin-top:8px;table-layout:fixed;}
+th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:#666;padding:6px 8px;border-bottom:1px solid var(--ink);}
+td{padding:7px 8px;border-bottom:1px solid var(--hair);font-size:13px;vertical-align:top;}
+td.num{font-family:'IBM Plex Mono',monospace;text-align:center;white-space:nowrap;}
+td.note{font-size:11px;color:#777;}
+tr.rest-row{background:#fafafa;}
+tr.postponed-row{background:#fbf3e0;}
+.pill{display:inline-block;padding:2px 9px;border-radius:10px;font-size:11px;font-weight:600;color:#fff;white-space:nowrap;}
+.tag-weight{background:var(--weight)}
+.tag-run{background:var(--run)}
+.tag-longrun{background:var(--longrun)}
+.tag-rest{background:var(--rest)}
+.tag-missed{background:var(--missed)}
+.tag-postponed{background:var(--postponed)}
+.tag-pending{background:var(--pending)}
+.flag{color:var(--missed);font-size:11px;font-weight:600;}
+.analysis{margin-top:36px;border-top:3px solid var(--ink);padding-top:16px;}
+.analysis h2{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:1px;}
+.analysis ul{font-family:'IBM Plex Mono',monospace;font-size:13px;line-height:1.9;padding-left:20px;}
+input.notefield{width:100%;border:none;background:transparent;font-size:11px;font-family:'Inter',sans-serif;color:#555;border-bottom:1px dashed #ccc;}
+
+body{padding:12px;}
+h1{font-size:30px;}
+.week-card{background:#fff;border:1px solid var(--hair);border-radius:8px;margin-top:14px;overflow:hidden;}
+.week-header{padding:12px 14px;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:.5px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;background:#efece5;}
+.week-body{padding:6px 14px 12px;}
+.day-card{border-bottom:1px solid var(--hair);padding:10px 0;}
+.day-card:last-child{border-bottom:none;}
+.day-top{display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:600;}
+.day-meta{font-family:'IBM Plex Mono',monospace;font-size:12px;color:#555;margin-top:4px;}
+.session-line{font-size:12px;margin-top:3px;color:#333;}
+</style></head><body>
+
+<div class="header-row">
+  <h1>MARATHON LOG</h1>
+  <div class="updated">อัปเดตล่าสุด: 16 ก.ย. 2569</div>
+</div>
+<div class="desc">บันทึกทุกวันตามตารางข้อมมาตรฐาน (จ.=เวท, อ.=วิ่ง, พ.=วิ่ง/cross training, พฤ.=เวท, ศ.=วิ่ง, ส.=พัก, อา.=วิ่งยาว) — วันไหนมีข้อมูลจริงจาก Strava จะลงตามนั้น วันไหนควรซ้อมแต่ไม่มีข้อมูลจะขึ้น "ขาดซ้อม"</div>
+<div class="progress-bar">
+  <div>แผน: <b>21 สัปดาห์</b></div>
+  <div>เริ่ม: <b>6 ก.ค. 2569</b></div>
+  <div>อยู่ที่: <b>สัปดาห์ 11 จาก 21</b></div>
+  <div>วันแข่ง: <b>29 พ.ย. 2569</b> (อีก 74 วัน)</div>
+</div>
+
+<details class="week-card" >
+          <summary class="week-header">WEEK 1 <span class="week-totals">30.8 กม. · 137 นาที</span></summary>
+          <div class="week-body"><div class="day-card">
+              <div class="day-top"><span>จันทร์ 6 ก.ค.</span><span class="pill tag-weight">เวท</span></div>
+              <div class="session-line">Lunch Weight Training — 31 นาที · 138 bpm</div><div class="session-line">Afternoon Weight Training — 71 นาที · 134 bpm</div>
+            </div><div class="day-card">
+              <div class="day-top"><span>อังคาร 7 ก.ค.</span><span class="pill tag-run">วิ่ง</span></div>
+              <div class="session-line">Afternoon Run — 6.68 กม. 60 นาที · 8:58/กม. · 148 bpm</div>
+            </div><div class="day-card">
+              <div class="day-top"><span>พุธ 8 ก.ค.</span><span class="pill tag-run">วิ่ง</span></div>
+              <div class="session-line">Afternoon Run — 6.89 กม. 60 นาที · 8:42/กม. · 152 bpm</div>
+            </div><div class="day-card">
+              <div class="day-top"><span>พฤหัสบดี 9 ก.ค.</span><span class="pill tag-weight">เวท</span></div>
+              <div class="session-line">Afternoon Weight Training — 35 นาที · 133 bpm</div>
+            </div><div class="day-card">
+              <div class="day-top"><span>ศุกร์ 10 ก.ค.</span><span class="pill tag-run">วิ่ง</span></div>
+              <div class="session-line">Afternoon Run — 6.74 กม. 60 นาที · 8:53/กม. · 153 bpm</div>
+            </div><div class="day-card">
+              <div class="day-top"><span>เสาร์ 11 ก.ค.</span><span class="pill tag-rest">วันพัก</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>อาทิตย์ 12 ก.ค.</span><span class="pill tag-postponed">เลื่อน</span></div>
+              
+            </div></div>
+        </details><details class="week-card" >
+          <summary class="week-header">WEEK 2 <span class="week-totals">23.5 กม. · 90 นาที</span></summary>
+          <div class="week-body"><div class="day-card">
+              <div class="day-top"><span>จันทร์ 13 ก.ค.</span><span class="pill tag-longrun">วิ่งยาว</span></div>
+              <div class="session-line">Evening Run — 10.53 กม. 90 นาที · 8:32/กม. · 158 bpm</div><div class="flag">+ เวทขาดวันนี้</div>
+            </div><div class="day-card">
+              <div class="day-top"><span>อังคาร 14 ก.ค.</span><span class="pill tag-run">วิ่ง</span></div>
+              <div class="session-line">Afternoon Run — 6.72 กม. 60 นาที · 8:55/กม. · 151 bpm</div>
+            </div><div class="day-card">
+              <div class="day-top"><span>พุธ 15 ก.ค.</span><span class="pill tag-missed">ขาดซ้อม</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>พฤหัสบดี 16 ก.ค.</span><span class="pill tag-weight">เวท</span></div>
+              <div class="session-line">Afternoon Weight Training — 62 นาที · 126 bpm</div>
+            </div><div class="day-card">
+              <div class="day-top"><span>ศุกร์ 17 ก.ค.</span><span class="pill tag-run">วิ่ง</span></div>
+              <div class="session-line">Lunch Weight Training — 28 นาที · 138 bpm</div><div class="session-line">Afternoon Run — 6.89 กม. 60 นาที · 8:42/กม. · 150 bpm</div>
+            </div><div class="day-card">
+              <div class="day-top"><span>เสาร์ 18 ก.ค.</span><span class="pill tag-rest">วันพัก</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>อาทิตย์ 19 ก.ค.</span><span class="pill tag-longrun">วิ่งยาว</span></div>
+              <div class="session-line">Afternoon Run — 9.94 กม. 90 นาที · 9:03/กม. · 154 bpm</div>
+            </div></div>
+        </details><details class="week-card" >
+          <summary class="week-header">WEEK 3 <span class="week-totals">25.0 กม. · 90 นาที</span></summary>
+          <div class="week-body"><div class="day-card">
+              <div class="day-top"><span>จันทร์ 20 ก.ค.</span><span class="pill tag-missed">ขาดซ้อม</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>อังคาร 21 ก.ค.</span><span class="pill tag-run">วิ่ง</span></div>
+              <div class="session-line">Afternoon Run — 6.96 กม. 60 นาที · 8:36/กม. · 151 bpm</div>
+            </div><div class="day-card">
+              <div class="day-top"><span>พุธ 22 ก.ค.</span><span class="pill tag-missed">ขาดซ้อม</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>พฤหัสบดี 23 ก.ค.</span><span class="pill tag-weight">เวท</span></div>
+              <div class="session-line">Lunch Weight Training — 37 นาที · 138 bpm</div><div class="session-line">Afternoon Weight Training — 53 นาที · 142 bpm</div>
+            </div><div class="day-card">
+              <div class="day-top"><span>ศุกร์ 24 ก.ค.</span><span class="pill tag-run">วิ่ง</span></div>
+              <div class="session-line">Afternoon Run — 6.82 กม. 60 นาที · 8:48/กม. · 151 bpm</div>
+            </div><div class="day-card">
+              <div class="day-top"><span>เสาร์ 25 ก.ค.</span><span class="pill tag-rest">วันพัก</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>อาทิตย์ 26 ก.ค.</span><span class="pill tag-longrun">วิ่งยาว</span></div>
+              <div class="session-line">Afternoon Run — 11.22 กม. 100 นาที · 8:55/กม. · 157 bpm</div>
+            </div></div>
+        </details><details class="week-card" >
+          <summary class="week-header">WEEK 4 <span class="week-totals">25.0 กม. · 95 นาที</span></summary>
+          <div class="week-body"><div class="day-card">
+              <div class="day-top"><span>จันทร์ 27 ก.ค.</span><span class="pill tag-weight">เวท</span></div>
+              <div class="session-line">Night Weight Training — 50 นาที · 133 bpm</div>
+            </div><div class="day-card">
+              <div class="day-top"><span>อังคาร 28 ก.ค.</span><span class="pill tag-run">วิ่ง</span></div>
+              <div class="session-line">Morning Run — 6.93 กม. 60 นาที · 8:39/กม. · 149 bpm</div>
+            </div><div class="day-card">
+              <div class="day-top"><span>พุธ 29 ก.ค.</span><span class="pill tag-run">วิ่ง</span></div>
+              <div class="session-line">Evening Run — 5.25 กม. 46 นาที · 8:41/กม. · 151 bpm</div>
+            </div><div class="day-card">
+              <div class="day-top"><span>พฤหัสบดี 30 ก.ค.</span><span class="pill tag-weight">เวท</span></div>
+              <div class="session-line">Lunch Weight Training — 45 นาที · 140 bpm</div>
+            </div><div class="day-card">
+              <div class="day-top"><span>ศุกร์ 31 ก.ค.</span><span class="pill tag-run">วิ่ง</span></div>
+              <div class="session-line">Afternoon Run — 6.96 กม. 60 นาที · 8:37/กม. · 146 bpm</div>
+            </div><div class="day-card">
+              <div class="day-top"><span>เสาร์ 1 ส.ค.</span><span class="pill tag-rest">วันพัก</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>อาทิตย์ 2 ส.ค.</span><span class="pill tag-run">วิ่ง</span></div>
+              <div class="session-line">Morning Run — 5.86 กม. 59 นาที · 10:05/กม. · 156 bpm</div>
+            </div></div>
+        </details><details class="week-card" >
+          <summary class="week-header">WEEK 5 <span class="week-totals">26.6 กม. · 176 นาที</span></summary>
+          <div class="week-body"><div class="day-card">
+              <div class="day-top"><span>จันทร์ 3 ส.ค.</span><span class="pill tag-weight">เวท</span></div>
+              <div class="session-line">Night Weight Training — 75 นาที · 141 bpm</div>
+            </div><div class="day-card">
+              <div class="day-top"><span>อังคาร 4 ส.ค.</span><span class="pill tag-run">วิ่ง</span></div>
+              <div class="session-line">Night Run — 4.7 กม. 45 นาที · 9:34/กม. · 150 bpm</div>
+            </div><div class="day-card">
+              <div class="day-top"><span>พุธ 5 ส.ค.</span><span class="pill tag-run">วิ่ง</span></div>
+              <div class="session-line">Night Run — 5.62 กม. 60 นาที · 10:40/กม. · 148 bpm</div>
+            </div><div class="day-card">
+              <div class="day-top"><span>พฤหัสบดี 6 ส.ค.</span><span class="pill tag-weight">เวท</span></div>
+              <div class="session-line">Lunch Weight Training — 32 นาที · 136 bpm</div><div class="session-line">Night Weight Training — 69 นาที · 131 bpm</div>
+            </div><div class="day-card">
+              <div class="day-top"><span>ศุกร์ 7 ส.ค.</span><span class="pill tag-missed">ขาดซ้อม</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>เสาร์ 8 ส.ค.</span><span class="pill tag-run">วิ่ง</span></div>
+              <div class="session-line">Afternoon Run — 6.02 กม. 60 นาที · 9:58/กม. · 146 bpm</div>
+            </div><div class="day-card">
+              <div class="day-top"><span>อาทิตย์ 9 ส.ค.</span><span class="pill tag-longrun">วิ่งยาว</span></div>
+              <div class="session-line">Afternoon Run — 10.22 กม. 105 นาที · 10:16/กม. · 148 bpm</div>
+            </div></div>
+        </details><details class="week-card" >
+          <summary class="week-header">WEEK 6 <span class="week-totals">22.1 กม. · 91 นาที</span></summary>
+          <div class="week-body"><div class="day-card">
+              <div class="day-top"><span>จันทร์ 10 ส.ค.</span><span class="pill tag-missed">ขาดซ้อม</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>อังคาร 11 ส.ค.</span><span class="pill tag-run">วิ่ง</span></div>
+              <div class="session-line">Afternoon Run — 6.0 กม. 60 นาที · 10:00/กม. · 149 bpm</div>
+            </div><div class="day-card">
+              <div class="day-top"><span>พุธ 12 ส.ค.</span><span class="pill tag-missed">ขาดซ้อม</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>พฤหัสบดี 13 ส.ค.</span><span class="pill tag-weight">เวท</span></div>
+              <div class="session-line">Lunch Weight Training — 38 นาที · 137 bpm</div><div class="session-line">Afternoon Weight Training — 53 นาที · 143 bpm</div>
+            </div><div class="day-card">
+              <div class="day-top"><span>ศุกร์ 14 ส.ค.</span><span class="pill tag-run">วิ่ง</span></div>
+              <div class="session-line">Afternoon Run — 5.55 กม. 60 นาที · 10:48/กม. · 145 bpm</div>
+            </div><div class="day-card">
+              <div class="day-top"><span>เสาร์ 15 ส.ค.</span><span class="pill tag-rest">วันพัก</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>อาทิตย์ 16 ส.ค.</span><span class="pill tag-postponed">เลื่อน</span></div>
+              
+            </div></div>
+        </details><details class="week-card" >
+          <summary class="week-header">WEEK 7 <span class="week-totals">27.6 กม. · 95 นาที</span></summary>
+          <div class="week-body"><div class="day-card">
+              <div class="day-top"><span>จันทร์ 17 ส.ค.</span><span class="pill tag-longrun">วิ่งยาว</span></div>
+              <div class="session-line">Evening Run — 10.58 กม. 115 นาที · 10:52/กม. · 141 bpm</div><div class="flag">+ เวทขาดวันนี้</div>
+            </div><div class="day-card">
+              <div class="day-top"><span>อังคาร 18 ส.ค.</span><span class="pill tag-run">วิ่ง</span></div>
+              <div class="session-line">Evening Run — 5.66 กม. 60 นาที · 10:35/กม. · 144 bpm</div>
+            </div><div class="day-card">
+              <div class="day-top"><span>พุธ 19 ส.ค.</span><span class="pill tag-run">วิ่ง</span></div>
+              <div class="session-line">Afternoon Run — 5.01 กม. 55 นาที · 10:56/กม. · 158 bpm</div>
+            </div><div class="day-card">
+              <div class="day-top"><span>พฤหัสบดี 20 ส.ค.</span><span class="pill tag-weight">เวท</span></div>
+              <div class="session-line">Night Weight Training — 65 นาที · 136 bpm</div>
+            </div><div class="day-card">
+              <div class="day-top"><span>ศุกร์ 21 ส.ค.</span><span class="pill tag-missed">ขาดซ้อม</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>เสาร์ 22 ส.ค.</span><span class="pill tag-run">วิ่ง</span></div>
+              <div class="session-line">Night Weight Training — 30 นาที · 123 bpm</div><div class="session-line">Night Run — 5.43 กม. 60 นาที · 11:02/กม. · 148 bpm</div>
+            </div><div class="day-card">
+              <div class="day-top"><span>อาทิตย์ 23 ส.ค.</span><span class="pill tag-postponed">เลื่อน</span></div>
+              
+            </div></div>
+        </details><details class="week-card" >
+          <summary class="week-header">WEEK 8 <span class="week-totals">16.6 กม. · 30 นาที</span></summary>
+          <div class="week-body"><div class="day-card">
+              <div class="day-top"><span>จันทร์ 24 ส.ค.</span><span class="pill tag-longrun">วิ่งยาว</span></div>
+              <div class="session-line">Evening Run — 11.45 กม. 125 นาที · 10:54/กม. · 146 bpm</div><div class="flag">+ เวทขาดวันนี้</div>
+            </div><div class="day-card">
+              <div class="day-top"><span>อังคาร 25 ส.ค.</span><span class="pill tag-run">วิ่ง</span></div>
+              <div class="session-line">Afternoon Run — 5.57 กม. 60 นาที · 10:46/กม. · 145 bpm</div>
+            </div><div class="day-card">
+              <div class="day-top"><span>พุธ 26 ส.ค.</span><span class="pill tag-run">วิ่ง</span></div>
+              <div class="session-line">Afternoon Run — 5.5 กม. 60 นาที · 10:54/กม. · 146 bpm</div>
+            </div><div class="day-card">
+              <div class="day-top"><span>พฤหัสบดี 27 ส.ค.</span><span class="pill tag-weight">เวท</span></div>
+              <div class="session-line">Lunch Weight Training — 30 นาที · 142 bpm</div>
+            </div><div class="day-card">
+              <div class="day-top"><span>ศุกร์ 28 ส.ค.</span><span class="pill tag-run">วิ่ง</span></div>
+              <div class="session-line">Afternoon Run — 5.57 กม. 60 นาที · 10:45/กม. · 144 bpm</div>
+            </div><div class="day-card">
+              <div class="day-top"><span>เสาร์ 29 ส.ค.</span><span class="pill tag-rest">วันพัก</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>อาทิตย์ 30 ส.ค.</span><span class="pill tag-missed">ขาดซ้อม</span></div>
+              
+            </div></div>
+        </details><details class="week-card" >
+          <summary class="week-header">WEEK 9 <span class="week-totals">17.1 กม. · 63 นาที</span></summary>
+          <div class="week-body"><div class="day-card">
+              <div class="day-top"><span>จันทร์ 31 ส.ค.</span><span class="pill tag-missed">ขาดซ้อม</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>อังคาร 1 ก.ย.</span><span class="pill tag-run">วิ่ง</span></div>
+              <div class="session-line">Evening Run — 5.62 กม. 60 นาที · 10:40/กม. · 146 bpm</div>
+            </div><div class="day-card">
+              <div class="day-top"><span>พุธ 2 ก.ย.</span><span class="pill tag-run">วิ่ง</span></div>
+              <div class="session-line">Afternoon Run — 5.67 กม. 60 นาที · 10:34/กม. · 143 bpm</div>
+            </div><div class="day-card">
+              <div class="day-top"><span>พฤหัสบดี 3 ก.ย.</span><span class="pill tag-weight">เวท</span></div>
+              <div class="session-line">Afternoon Weight Training — 43 นาที · 135 bpm</div><div class="session-line">Evening Weight Training — 20 นาที · 128 bpm</div>
+            </div><div class="day-card">
+              <div class="day-top"><span>ศุกร์ 4 ก.ย.</span><span class="pill tag-run">วิ่ง</span></div>
+              <div class="session-line">Afternoon Run — 5.83 กม. 60 นาที · 10:17/กม. · 144 bpm</div>
+            </div><div class="day-card">
+              <div class="day-top"><span>เสาร์ 5 ก.ย.</span><span class="pill tag-rest">วันพัก</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>อาทิตย์ 6 ก.ย.</span><span class="pill tag-missed">ขาดซ้อม</span></div>
+              
+            </div></div>
+        </details><details class="week-card" >
+          <summary class="week-header">WEEK 10 <span class="week-totals">27.6 กม. · 74 นาที</span></summary>
+          <div class="week-body"><div class="day-card">
+              <div class="day-top"><span>จันทร์ 7 ก.ย.</span><span class="pill tag-missed">ขาดซ้อม</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>อังคาร 8 ก.ย.</span><span class="pill tag-run">วิ่ง</span></div>
+              <div class="session-line">Afternoon Run — 6.08 กม. 60 นาที · 9:51/กม. · 144 bpm</div>
+            </div><div class="day-card">
+              <div class="day-top"><span>พุธ 9 ก.ย.</span><span class="pill tag-run">วิ่ง</span></div>
+              <div class="session-line">Night Run — 4.98 กม. 45 นาที · 9:02/กม. · 154 bpm</div>
+            </div><div class="day-card">
+              <div class="day-top"><span>พฤหัสบดี 10 ก.ย.</span><span class="pill tag-weight">เวท</span></div>
+              <div class="session-line">Evening Weight Training — 51 นาที · 137 bpm</div><div class="session-line">Night Weight Training — 23 นาที · 131 bpm</div>
+            </div><div class="day-card">
+              <div class="day-top"><span>ศุกร์ 11 ก.ย.</span><span class="pill tag-run">วิ่ง</span></div>
+              <div class="session-line">Afternoon Run — 6.48 กม. 60 นาที · 9:15/กม. · 144 bpm</div>
+            </div><div class="day-card">
+              <div class="day-top"><span>เสาร์ 12 ก.ย.</span><span class="pill tag-rest">วันพัก</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>อาทิตย์ 13 ก.ย.</span><span class="pill tag-longrun">วิ่งยาว</span></div>
+              <div class="session-line">Afternoon Run — 10.03 กม. 100 นาที · 9:59/กม. · 156 bpm</div>
+            </div></div>
+        </details><details class="week-card" open>
+          <summary class="week-header">WEEK 11 <span class="week-totals">0.0 กม. · 73 นาที</span></summary>
+          <div class="week-body"><div class="day-card">
+              <div class="day-top"><span>จันทร์ 14 ก.ย.</span><span class="pill tag-weight">เวท</span></div>
+              <div class="session-line">Afternoon Weight Training — 54 นาที · 130 bpm</div><div class="session-line">Evening Weight Training — 19 นาที · 132 bpm</div>
+            </div><div class="day-card">
+              <div class="day-top"><span>อังคาร 15 ก.ย.</span><span class="pill tag-missed">ขาดซ้อม</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>พุธ 16 ก.ย.</span><span class="pill tag-pending">รอ</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>พฤหัสบดี 17 ก.ย.</span><span class="pill tag-pending">รอ</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>ศุกร์ 18 ก.ย.</span><span class="pill tag-pending">รอ</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>เสาร์ 19 ก.ย.</span><span class="pill tag-rest">วันพัก</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>อาทิตย์ 20 ก.ย.</span><span class="pill tag-pending">รอ</span></div>
+              
+            </div></div>
+        </details><details class="week-card" >
+          <summary class="week-header">WEEK 12 <span class="week-totals">0.0 กม. · 0 นาที</span></summary>
+          <div class="week-body"><div class="day-card">
+              <div class="day-top"><span>จันทร์ 21 ก.ย.</span><span class="pill tag-pending">รอ</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>อังคาร 22 ก.ย.</span><span class="pill tag-pending">รอ</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>พุธ 23 ก.ย.</span><span class="pill tag-pending">รอ</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>พฤหัสบดี 24 ก.ย.</span><span class="pill tag-pending">รอ</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>ศุกร์ 25 ก.ย.</span><span class="pill tag-pending">รอ</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>เสาร์ 26 ก.ย.</span><span class="pill tag-rest">วันพัก</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>อาทิตย์ 27 ก.ย.</span><span class="pill tag-pending">รอ</span></div>
+              
+            </div></div>
+        </details><details class="week-card" >
+          <summary class="week-header">WEEK 13 <span class="week-totals">0.0 กม. · 0 นาที</span></summary>
+          <div class="week-body"><div class="day-card">
+              <div class="day-top"><span>จันทร์ 28 ก.ย.</span><span class="pill tag-pending">รอ</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>อังคาร 29 ก.ย.</span><span class="pill tag-pending">รอ</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>พุธ 30 ก.ย.</span><span class="pill tag-pending">รอ</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>พฤหัสบดี 1 ต.ค.</span><span class="pill tag-pending">รอ</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>ศุกร์ 2 ต.ค.</span><span class="pill tag-pending">รอ</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>เสาร์ 3 ต.ค.</span><span class="pill tag-rest">วันพัก</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>อาทิตย์ 4 ต.ค.</span><span class="pill tag-pending">รอ</span></div>
+              
+            </div></div>
+        </details><details class="week-card" >
+          <summary class="week-header">WEEK 14 <span class="week-totals">0.0 กม. · 0 นาที</span></summary>
+          <div class="week-body"><div class="day-card">
+              <div class="day-top"><span>จันทร์ 5 ต.ค.</span><span class="pill tag-pending">รอ</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>อังคาร 6 ต.ค.</span><span class="pill tag-pending">รอ</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>พุธ 7 ต.ค.</span><span class="pill tag-pending">รอ</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>พฤหัสบดี 8 ต.ค.</span><span class="pill tag-pending">รอ</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>ศุกร์ 9 ต.ค.</span><span class="pill tag-pending">รอ</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>เสาร์ 10 ต.ค.</span><span class="pill tag-rest">วันพัก</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>อาทิตย์ 11 ต.ค.</span><span class="pill tag-pending">รอ</span></div>
+              
+            </div></div>
+        </details><details class="week-card" >
+          <summary class="week-header">WEEK 15 <span class="week-totals">0.0 กม. · 0 นาที</span></summary>
+          <div class="week-body"><div class="day-card">
+              <div class="day-top"><span>จันทร์ 12 ต.ค.</span><span class="pill tag-pending">รอ</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>อังคาร 13 ต.ค.</span><span class="pill tag-pending">รอ</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>พุธ 14 ต.ค.</span><span class="pill tag-pending">รอ</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>พฤหัสบดี 15 ต.ค.</span><span class="pill tag-pending">รอ</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>ศุกร์ 16 ต.ค.</span><span class="pill tag-pending">รอ</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>เสาร์ 17 ต.ค.</span><span class="pill tag-rest">วันพัก</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>อาทิตย์ 18 ต.ค.</span><span class="pill tag-pending">รอ</span></div>
+              
+            </div></div>
+        </details><details class="week-card" >
+          <summary class="week-header">WEEK 16 <span class="week-totals">0.0 กม. · 0 นาที</span></summary>
+          <div class="week-body"><div class="day-card">
+              <div class="day-top"><span>จันทร์ 19 ต.ค.</span><span class="pill tag-pending">รอ</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>อังคาร 20 ต.ค.</span><span class="pill tag-pending">รอ</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>พุธ 21 ต.ค.</span><span class="pill tag-pending">รอ</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>พฤหัสบดี 22 ต.ค.</span><span class="pill tag-pending">รอ</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>ศุกร์ 23 ต.ค.</span><span class="pill tag-pending">รอ</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>เสาร์ 24 ต.ค.</span><span class="pill tag-rest">วันพัก</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>อาทิตย์ 25 ต.ค.</span><span class="pill tag-pending">รอ</span></div>
+              
+            </div></div>
+        </details><details class="week-card" >
+          <summary class="week-header">WEEK 17 <span class="week-totals">0.0 กม. · 0 นาที</span></summary>
+          <div class="week-body"><div class="day-card">
+              <div class="day-top"><span>จันทร์ 26 ต.ค.</span><span class="pill tag-pending">รอ</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>อังคาร 27 ต.ค.</span><span class="pill tag-pending">รอ</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>พุธ 28 ต.ค.</span><span class="pill tag-pending">รอ</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>พฤหัสบดี 29 ต.ค.</span><span class="pill tag-pending">รอ</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>ศุกร์ 30 ต.ค.</span><span class="pill tag-pending">รอ</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>เสาร์ 31 ต.ค.</span><span class="pill tag-rest">วันพัก</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>อาทิตย์ 1 พ.ย.</span><span class="pill tag-pending">รอ</span></div>
+              
+            </div></div>
+        </details><details class="week-card" >
+          <summary class="week-header">WEEK 18 <span class="week-totals">0.0 กม. · 0 นาที</span></summary>
+          <div class="week-body"><div class="day-card">
+              <div class="day-top"><span>จันทร์ 2 พ.ย.</span><span class="pill tag-pending">รอ</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>อังคาร 3 พ.ย.</span><span class="pill tag-pending">รอ</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>พุธ 4 พ.ย.</span><span class="pill tag-pending">รอ</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>พฤหัสบดี 5 พ.ย.</span><span class="pill tag-pending">รอ</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>ศุกร์ 6 พ.ย.</span><span class="pill tag-pending">รอ</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>เสาร์ 7 พ.ย.</span><span class="pill tag-rest">วันพัก</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>อาทิตย์ 8 พ.ย.</span><span class="pill tag-pending">รอ</span></div>
+              
+            </div></div>
+        </details><details class="week-card" >
+          <summary class="week-header">WEEK 19 <span class="week-totals">0.0 กม. · 0 นาที</span></summary>
+          <div class="week-body"><div class="day-card">
+              <div class="day-top"><span>จันทร์ 9 พ.ย.</span><span class="pill tag-pending">รอ</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>อังคาร 10 พ.ย.</span><span class="pill tag-pending">รอ</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>พุธ 11 พ.ย.</span><span class="pill tag-pending">รอ</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>พฤหัสบดี 12 พ.ย.</span><span class="pill tag-pending">รอ</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>ศุกร์ 13 พ.ย.</span><span class="pill tag-pending">รอ</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>เสาร์ 14 พ.ย.</span><span class="pill tag-rest">วันพัก</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>อาทิตย์ 15 พ.ย.</span><span class="pill tag-pending">รอ</span></div>
+              
+            </div></div>
+        </details><details class="week-card" >
+          <summary class="week-header">WEEK 20 <span class="week-totals">0.0 กม. · 0 นาที</span></summary>
+          <div class="week-body"><div class="day-card">
+              <div class="day-top"><span>จันทร์ 16 พ.ย.</span><span class="pill tag-pending">รอ</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>อังคาร 17 พ.ย.</span><span class="pill tag-pending">รอ</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>พุธ 18 พ.ย.</span><span class="pill tag-pending">รอ</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>พฤหัสบดี 19 พ.ย.</span><span class="pill tag-pending">รอ</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>ศุกร์ 20 พ.ย.</span><span class="pill tag-pending">รอ</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>เสาร์ 21 พ.ย.</span><span class="pill tag-rest">วันพัก</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>อาทิตย์ 22 พ.ย.</span><span class="pill tag-pending">รอ</span></div>
+              
+            </div></div>
+        </details><details class="week-card" >
+          <summary class="week-header">WEEK 21 <span class="week-totals">0.0 กม. · 0 นาที</span></summary>
+          <div class="week-body"><div class="day-card">
+              <div class="day-top"><span>จันทร์ 23 พ.ย.</span><span class="pill tag-pending">รอ</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>อังคาร 24 พ.ย.</span><span class="pill tag-pending">รอ</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>พุธ 25 พ.ย.</span><span class="pill tag-pending">รอ</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>พฤหัสบดี 26 พ.ย.</span><span class="pill tag-pending">รอ</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>ศุกร์ 27 พ.ย.</span><span class="pill tag-pending">รอ</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>เสาร์ 28 พ.ย.</span><span class="pill tag-rest">วันพัก</span></div>
+              
+            </div><div class="day-card">
+              <div class="day-top"><span>อาทิตย์ 29 พ.ย.</span><span class="pill tag-pending">รอ</span></div>
+              
+            </div></div>
+        </details>
+
+<div class="analysis">
+  <h2>สรุปภาพรวม</h2>
+  <ul>
+    <li>ระยะวิ่งรวม: <b>242.0 กม.</b></li>
+    <li>เวทรวม: <b>1014 นาที</b></li>
+    <li>ขาดซ้อม <b>เวท</b> 7 จาก 24 ครั้ง</li><li>ขาดซ้อม <b>วิ่ง</b> 6 จาก 31 ครั้ง</li><li>ขาดซ้อม <b>วิ่งยาว</b> 2 จาก 10 ครั้ง</li>
+    <li>วิ่งยาวสุด: <b>24 ส.ค. — 11.45 กม. (10:54/กม., HR เฉลี่ย 146 bpm)</b></li>
+    <li>ยังไม่มีข้อมูลปั่นจักรยาน (Ride) เลย</li>
+  </ul>
+</div>
+
+</body></html>
