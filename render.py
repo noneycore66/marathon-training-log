@@ -175,8 +175,9 @@ def render_desktop(days, all_days, weeks, analysis, today, plan_start, race_date
             note_parts = []
             if "weight_missed_makeup_day" in rec["note_flags"]:
                 note_parts.append('<span class="flag">ขาดซ้อมเวท วิ่งชดเชยแทนวันนี้</span>')
-            if rec["status"] == "Postponed" and rec.get("postponed_note"):
-                note_parts.append(f'<span class="flag">เลื่อนวิ่งยาวมาจาก{rec["postponed_note"]}</span>')
+            if rec.get("credited_from"):
+                from_day = THAI_DAY[rec["credited_from"].weekday()]
+                note_parts.append(f'<span class="flag">วิ่ง long run เลื่อนมาจากวัน{from_day}</span>')
             note = "".join(note_parts)
             rows.append(f"""<tr class="{row_cls}">
               <td>{THAI_DAY[rec['weekday']]}</td>
@@ -220,8 +221,8 @@ def render_mobile(days, all_days, weeks, analysis, today, plan_start, race_date,
             flag_parts = []
             if "weight_missed_makeup_day" in rec["note_flags"]:
                 flag_parts.append('<div class="flag">ขาดซ้อมเวท วิ่งชดเชยแทนวันนี้</div>')
-            if rec["status"] == "Postponed" and rec.get("postponed_note"):
-                flag_parts.append(f'<div class="flag">เลื่อนวิ่งยาวมาจาก{rec["postponed_note"]}</div>')
+            if rec.get("credited_from"):
+                flag_parts.append(f'<div class="flag">วิ่ง long run เลื่อนมาจากวัน{THAI_DAY[rec["credited_from"].weekday()]}</div>')
             flag = "".join(flag_parts)
             cards.append(f"""<div class="day-card">
               <div class="day-top"><span>{THAI_DAY[rec['weekday']]} {fmt_date(d)}</span>{day_status_pill(rec)}</div>
