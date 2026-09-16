@@ -48,6 +48,7 @@ tr.postponed-row{background:#fbf3e0;}
 .tag-postponed{background:var(--postponed)}
 .tag-pending{background:var(--pending)}
 .flag{color:var(--missed);font-size:11px;font-weight:600;}
+.flag-info{color:var(--longrun);font-size:11px;font-weight:600;}
 .analysis{margin-top:36px;border-top:3px solid var(--ink);padding-top:16px;}
 .analysis h2{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:1px;}
 .analysis ul{font-family:'IBM Plex Mono',monospace;font-size:13px;line-height:1.9;padding-left:20px;}
@@ -173,11 +174,11 @@ def render_desktop(days, all_days, weeks, analysis, today, plan_start, race_date
             hr = ", ".join(str(s["avg_hr"]) + " bpm" for s in sessions if s.get("avg_hr")) or "-"
             name = day_program_name(rec) if sessions else (rec.get("postponed_note") and f"Long Run ({rec['postponed_note']})" or "Rest" if rec["status"] == "Rest" else "-")
             note_parts = []
-            if "weight_missed_makeup_day" in rec["note_flags"]:
-                note_parts.append('<span class="flag">ขาดซ้อมเวท วิ่งชดเชยแทนวันนี้</span>')
             if rec.get("credited_from"):
                 from_day = THAI_DAY[rec["credited_from"].weekday()]
-                note_parts.append(f'<span class="flag">วิ่ง long run เลื่อนมาจากวัน{from_day}</span>')
+                note_parts.append(f'<span class="flag-info">วิ่ง long run เลื่อนมาจากวัน{from_day}</span>')
+            if "weight_missed_makeup_day" in rec["note_flags"]:
+                note_parts.append('<span class="flag">ขาดซ้อมเวท</span>')
             note = "".join(note_parts)
             rows.append(f"""<tr class="{row_cls}">
               <td>{THAI_DAY[rec['weekday']]}</td>
@@ -219,10 +220,10 @@ def render_mobile(days, all_days, weeks, analysis, today, plan_start, race_date,
                 return f'<div class="session-line">{s["name"]} — {dist_part}{s["moving_min"]} นาที{pace_part}{hr_part}</div>'
             sess_lines = "".join(_sess_line(s) for s in rec["sessions"])
             flag_parts = []
-            if "weight_missed_makeup_day" in rec["note_flags"]:
-                flag_parts.append('<div class="flag">ขาดซ้อมเวท วิ่งชดเชยแทนวันนี้</div>')
             if rec.get("credited_from"):
-                flag_parts.append(f'<div class="flag">วิ่ง long run เลื่อนมาจากวัน{THAI_DAY[rec["credited_from"].weekday()]}</div>')
+                flag_parts.append(f'<div class="flag-info">วิ่ง long run เลื่อนมาจากวัน{THAI_DAY[rec["credited_from"].weekday()]}</div>')
+            if "weight_missed_makeup_day" in rec["note_flags"]:
+                flag_parts.append('<div class="flag">ขาดซ้อมเวท</div>')
             flag = "".join(flag_parts)
             cards.append(f"""<div class="day-card">
               <div class="day-top"><span>{THAI_DAY[rec['weekday']]} {fmt_date(d)}</span>{day_status_pill(rec)}</div>
