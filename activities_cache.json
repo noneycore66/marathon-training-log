@@ -647,5 +647,16 @@
     "avg_hr": 132,
     "max_hr": 156,
     "pace": null
+  },
+  {
+    "date": "2026-09-16",
+    "raw_start": "2026-09-16T18:40:11Z",
+    "type": "Run",
+    "name": "Evening Run",
+    "distance_km": 6.05,
+    "moving_min": 60,
+    "avg_hr": 157,
+    "max_hr": 166,
+    "pace": "9:53/\u0e01\u0e21."
   }
 ]
