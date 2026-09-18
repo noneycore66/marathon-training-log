@@ -658,5 +658,27 @@
     "avg_hr": 157,
     "max_hr": 166,
     "pace": "9:53/\u0e01\u0e21."
+  },
+  {
+    "date": "2026-09-17",
+    "raw_start": "2026-09-17T13:01:17Z",
+    "type": "WeightTraining",
+    "name": "Afternoon Weight Training",
+    "distance_km": 0.0,
+    "moving_min": 21,
+    "avg_hr": 131,
+    "max_hr": 159,
+    "pace": null
+  },
+  {
+    "date": "2026-09-17",
+    "raw_start": "2026-09-17T16:10:01Z",
+    "type": "WeightTraining",
+    "name": "Afternoon Weight Training",
+    "distance_km": 0.0,
+    "moving_min": 43,
+    "avg_hr": 128,
+    "max_hr": 178,
+    "pace": null
   }
 ]
