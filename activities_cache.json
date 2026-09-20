@@ -680,5 +680,27 @@
     "avg_hr": 128,
     "max_hr": 178,
     "pace": null
+  },
+  {
+    "date": "2026-09-19",
+    "raw_start": "2026-09-19T23:15:34Z",
+    "type": "Run",
+    "name": "Night Run",
+    "distance_km": 5.31,
+    "moving_min": 45,
+    "avg_hr": 140,
+    "max_hr": 149,
+    "pace": "8:28/\u0e01\u0e21."
+  },
+  {
+    "date": "2026-09-20",
+    "raw_start": "2026-09-20T13:00:43Z",
+    "type": "WeightTraining",
+    "name": "Afternoon Weight Training",
+    "distance_km": 0.0,
+    "moving_min": 31,
+    "avg_hr": 130,
+    "max_hr": 166,
+    "pace": null
   }
 ]
